@@ -1,0 +1,9 @@
+@ApiResource, @Groups, @ApiFilter
+
+1. collectionOperations
+2. itemOperations
+3. normalizationContext
+4. denormalizationContext
+5. shortName
+6.
+
