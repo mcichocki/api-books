@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\BooksRepository;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-
 /**
  * @ApiResource(
  *     collectionOperations={"get","post"},
@@ -20,6 +22,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     }
  * )
  * @ORM\Entity(repositoryClass=BooksRepository::class)
+ * @ApiFilter(BooleanFilter::class, properties={"isPublished"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
  */
 class Books
 {
@@ -60,6 +64,11 @@ class Books
      * @Groups({"books:read", "books:write"})
      */
     private $price;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublished = false;
 
     public function __construct()
     {
@@ -134,6 +143,18 @@ class Books
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getIsPublished(): ?bool
+    {
+        return $this->isPublished;
+    }
+
+    public function setIsPublished(bool $isPublished): self
+    {
+        $this->isPublished = $isPublished;
 
         return $this;
     }
